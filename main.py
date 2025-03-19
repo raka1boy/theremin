@@ -4,9 +4,9 @@ import threading
 from pynput import mouse
 import random
 SAMPLE_RATE = 44100 
-CHUNK = 3
+CHUNK = 2
 MAX_FREQ = 2000
-MAX_AMPLITUDE = 0.5
+MAX_AMPLITUDE = 1
 
 mouse_x = 0
 mouse_y = 0
