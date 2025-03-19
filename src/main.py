@@ -5,7 +5,7 @@ from pynput import mouse
 
 #вызывать при каждом изменении параметроу
 def init():
-    gen = sine_gen.SineGen(max_freq=2000, chunk_size=1024, harmonics=[1])
+    gen = sine_gen.SineGen(max_freq=500, chunk_size=16, harmonics=[0.2,0.5,1,1.4,2.1])
     mouse_listener = mouse.Listener(on_move=gen.on_move)
     mouse_listener.start()
     p = pyaudio.PyAudio()
