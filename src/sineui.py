@@ -8,81 +8,92 @@ from tkinter import ttk
 
 SCREEN_X, SCREEN_Y = 1920, 1080
 
+def snap_frequency(freq):
+    """Snap frequency to nearest note in 12-TET scale"""
+    if freq <= 0:
+        return freq
+    A4 = 440.0
+    C0 = A4 * (2 ** (-4.75))
+    half_steps = 12 * np.log2(freq / C0)
+    key_number = round(half_steps)
+    return C0 * (2 ** (key_number / 12))
+
+def note_from_freq(frequency):
+    if frequency <= 0:
+        return None
+    A4 = 440.0
+    C0 = A4 * (2 ** (-4.75))
+    half_steps = 12 * np.log2(frequency / C0)
+    key_number = round(half_steps)
+    note = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"][key_number % 12]
+    octave = key_number // 12
+    return (note, octave)
+
 class HarmonicControl(ttk.Frame):
-    """Custom widget for controlling a single harmonic"""
     def __init__(self, parent, generator, multiplier, on_remove=None):
         super().__init__(parent)
         self.generator = generator
         self.multiplier = multiplier
         self.on_remove = on_remove
+        self.snap_to_note = tk.BooleanVar(value=False)
         
-        # Harmonic label
         ttk.Label(self, text=f"{multiplier}x").grid(row=0, column=0, padx=5)
         
-        # Amplitude slider
         self.amp_slider = ttk.Scale(
-            self, 
-            from_=0, 
-            to=1, 
-            value=1.0,
-            command=self.update_amplitude
+            self, from_=0, to=1, value=1.0,
+            command=lambda v: [self.generator.set_harmonic_amp(self.multiplier, float(v)),
+                               self.update_display()]
         )
         self.amp_slider.grid(row=0, column=1, sticky="ew", padx=5)
         
-        # Note display
         self.note_var = tk.StringVar()
-        self.note_label = ttk.Label(self, textvariable=self.note_var, width=10)
-        self.note_label.grid(row=0, column=2, padx=5)
+        ttk.Label(self, textvariable=self.note_var, width=10).grid(row=0, column=2, padx=5)
         
-        # Frequency display
         self.freq_var = tk.StringVar()
-        self.freq_label = ttk.Label(self, textvariable=self.freq_var, width=10)
-        self.freq_label.grid(row=0, column=3, padx=5)
+        ttk.Label(self, textvariable=self.freq_var, width=10).grid(row=0, column=3, padx=5)
         
-        # Remove button
-        ttk.Button(
-            self, 
-            text="×", 
-            width=2,
-            command=self.remove_harmonic
-        ).grid(row=0, column=4, padx=5)
+        self.snap_cb = ttk.Checkbutton(
+            self, text="Snap", variable=self.snap_to_note,
+            command=lambda: [self.generator.set_harmonic_snap(self.multiplier, self.snap_to_note.get()),
+                             self.update_display()]
+        )
+        self.snap_cb.grid(row=0, column=4, padx=5)
         
-        self.columnconfigure(1, weight=1)  # Make slider expandable
-
-    def update_amplitude(self, value):
-        self.generator.set_harmonic_amp(self.multiplier, float(value))
-        self.update_note_display()
+        ttk.Button(self, text="×", width=2, command=self.remove_harmonic).grid(row=0, column=5, padx=5)
+        self.columnconfigure(1, weight=1)
 
     def remove_harmonic(self):
         self.generator.remove_harmonic(self.multiplier)
         if self.on_remove:
             self.on_remove(self.multiplier)
 
-    def update_note_display(self):
-        """Update the note and frequency display for this harmonic"""
+    def update_display(self):
         if hasattr(self.generator, 'mouse_x'):
             base_freq = (self.generator.mouse_x / 1920) * (self.generator.max_freq - self.generator.min_freq) + self.generator.min_freq
-            harmonic_freq = base_freq * self.multiplier
-            note_info = note_from_freq(harmonic_freq)
+            raw_freq = base_freq * self.multiplier
+            display_freq = snap_frequency(raw_freq) if self.snap_to_note.get() else raw_freq
             
-            if note_info:
-                note, octave = note_info
-                self.note_var.set(f"{note}{octave}")
-            else:
-                self.note_var.set("")
-                
-            self.freq_var.set(f"{harmonic_freq:.1f} Hz")
-
+            note_info = note_from_freq(display_freq)
+            self.note_var.set(f"{note_info[0]}{note_info[1]}" if note_info else "")
+            self.freq_var.set(f"{display_freq:.1f} Hz")
 class ControlUI(tk.Tk):
     def __init__(self, generator):
         super().__init__()
         self.generator = generator
         self.title("Терменбокс")
-        self.geometry("600x600")  # Increased height to accommodate all controls
+        self.geometry("700x600")
         
         self.setup_ui()
         self.setup_audio()
-        self.setup_note_updater()
+        self.setup_updater()
+
+    def setup_updater(self):
+        def update_all():
+            for child in self.inner_harmonics_frame.winfo_children():
+                if isinstance(child, HarmonicControl):
+                    child.update_display()
+            self.after(100, update_all)
+        update_all()
 
     def setup_ui(self):
         main_frame = ttk.Frame(self)
@@ -109,7 +120,7 @@ class ControlUI(tk.Tk):
         
         harmonics_container = ttk.LabelFrame(mid_frame, text="Гармоники", height=200)
         harmonics_container.pack(fill=tk.BOTH, expand=True)
-        harmonics_container.pack_propagate(False)  # Prevent container from resizing
+        harmonics_container.pack_propagate(False)
         
         # Add column headers
         header_frame = ttk.Frame(harmonics_container)
@@ -118,6 +129,7 @@ class ControlUI(tk.Tk):
         ttk.Label(header_frame, text="Amplitude", width=15).grid(row=0, column=1)
         ttk.Label(header_frame, text="Note", width=10).grid(row=0, column=2)
         ttk.Label(header_frame, text="Frequency", width=10).grid(row=0, column=3)
+        ttk.Label(header_frame, text="Snap", width=10).grid(row=0, column=4)
         
         # Scrollable area for harmonics
         canvas_frame = ttk.Frame(harmonics_container)
@@ -207,18 +219,18 @@ class ControlUI(tk.Tk):
             on_remove=remove_callback
         )
         control.pack(fill=tk.X, pady=2)
-        control.update_note_display()  # Initialize display
+        control.update_display()
         self.harmonics_canvas.configure(scrollregion=self.harmonics_canvas.bbox("all"))
 
     def setup_note_updater(self):
         """Set up periodic updates for note displays"""
         def update_notes():
             for child in self.inner_harmonics_frame.winfo_children():
-                if hasattr(child, 'update_note_display'):
-                    child.update_note_display()
-            self.after(100, update_notes)  # Update 10 times per second
+                if hasattr(child, 'update_display'):
+                    child.update_display()
+            self.after(100, update_notes)
         
-        update_notes()  # Start the updater
+        update_notes()
 
     def setup_audio(self):
         def on_move(x, y):
