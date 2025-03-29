@@ -26,7 +26,11 @@ class HarmonicControl(ttk.Frame):
         self.multiplier = multiplier
         self.on_remove = on_remove
         self.snap_to_note = tk.BooleanVar(value=False)
-        self.trigger_key = None
+        self.trigger_key = "space"
+        self.key_btn = ttk.Button(
+            self, text="Key: space", command=self.set_trigger_key, width=8
+        )
+        self.key_btn.grid(row=0, column=7, padx=5)
         
         # Configure grid weights
         for col in [1, 3, 5]:
@@ -55,10 +59,24 @@ class HarmonicControl(ttk.Frame):
         # Pitch Smoothing
         ttk.Label(self, text="Pitch Smooth:").grid(row=0, column=5, padx=(10,0), sticky='e')
         self.pitch_smoothing_slider = ttk.Scale(
-            self, from_=0, to=10, value=0,
+            self, 
+            from_=0, 
+            to=100,  # Reduced max value for finer control
+            value=0,  # Lower default
             command=lambda v: self.generator.set_harmonic_pitch_smoothing(self.multiplier, float(v))
         )
         self.pitch_smoothing_slider.grid(row=0, column=6, sticky="ew", padx=5)
+
+        # Add a label showing exact value
+        self.pitch_smooth_value = tk.StringVar()
+        self.pitch_smooth_value.set("50ms")
+        ttk.Label(self, textvariable=self.pitch_smooth_value, width=5).grid(row=0, column=7, padx=(0,5))
+
+        # Modify the command to update the label
+        self.pitch_smoothing_slider.config(command=lambda v: [
+            self.generator.set_harmonic_pitch_smoothing(self.multiplier, float(v)),
+            self.pitch_smooth_value.set(f"{int(float(v))}ms")
+        ])
         
         # Key binding
         self.key_btn = ttk.Button(
@@ -86,12 +104,23 @@ class HarmonicControl(ttk.Frame):
         ttk.Button(self, text="×", width=2, command=self.remove_harmonic).grid(row=0, column=11, padx=5)
 
     def set_trigger_key(self):
-        key = simpledialog.askstring("Set Trigger Key", 
-                                   f"Press a key to trigger harmonic {self.multiplier}x:",
-                                   parent=self)
-        if key and len(key) == 1:
-            self.trigger_key = key.lower()
-            self.key_btn.config(text=f"Key: {self.trigger_key}")
+        key = simpledialog.askstring(
+            "Set Trigger Key",
+            f"Press a key to trigger harmonic {self.multiplier}x (or 'space' for spacebar):",
+            parent=self
+        )
+        if key:
+            # Handle spacebar specially
+            if key.lower() in ["space", " "]:
+                key = "space"
+            elif len(key) == 1:
+                key = key.lower()
+            else:
+                return  # Invalid input
+            
+            self.trigger_key = key
+            display_text = "space" if key == "space" else key
+            self.key_btn.config(text=f"Key: {display_text}")
             self.generator.set_harmonic_key(self.multiplier, self.trigger_key)
 
     def remove_harmonic(self):

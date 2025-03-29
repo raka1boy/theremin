@@ -30,7 +30,7 @@ class SineGen:
         self.harmonic_keys = []
         self.master_amp = 0.5
         self.global_amp_smoothing = 100  # Global amplitude smoothing
-        self.global_pitch_smoothing = 100  # Global pitch smoothing
+        self.global_pitch_smoothing = 50  # Lower default for more precision
         self.current_amps = []
         self.target_amps = []
         self.last_key_check = time.time()
@@ -38,7 +38,7 @@ class SineGen:
         self.target_freqs = []
         self.current_freqs = []
 
-    def add_harmonic(self, multiplier, initial_amp=1.0, amp_smoothing=100, pitch_smoothing=100, trigger_key=None):
+    def add_harmonic(self, multiplier, initial_amp=1.0, amp_smoothing=100, pitch_smoothing=50, trigger_key="space"):
         try:
             mult = float(multiplier)
             if mult not in self.harmonics:
