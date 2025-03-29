@@ -1,10 +1,11 @@
-import sine_gen
-import sineui
+from sineui import ControlUI
+from sine_gen import SineGen
+
 def main():
-    generator = sine_gen.SineGen(chunk_size = 128)
-    ui = sineui.ControlUI(generator)
-    ui.protocol("WM_DELETE_WINDOW", ui.on_closing)
-    ui.mainloop()
+    generator = SineGen(chunk_size=128)
+    app = ControlUI(generator)
+    app.protocol("WM_DELETE_WINDOW", app.on_closing)
+    app.mainloop()
 
 if __name__ == "__main__":
     main()

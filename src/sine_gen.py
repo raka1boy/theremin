@@ -1,7 +1,7 @@
-# sine_gen.py
 import numpy as np
 import pyaudio
 import keyboard
+import time
 
 def snap_frequency(freq):
     """Snap frequency to nearest note in 12-TET scale"""
@@ -21,19 +21,24 @@ class SineGen:
         self.chunk_size = chunk_size
         self.mouse_x = 1920 // 2
         self.mouse_y = 1080 // 2
-        self.harmonics = []     # List of harmonic multipliers
-        self.phases = []        # Phase values for each harmonic
-        self.harmonic_amps = [] # Amplitude for each harmonic
-        self.snap_enabled = [] # Whether to snap frequency for each harmonic
+        self.harmonics = []
+        self.phases = []
+        self.harmonic_amps = []
+        self.snap_enabled = []
+        self.harmonic_amp_smoothing = []  # Amplitude smoothing (ms)
+        self.harmonic_pitch_smoothing = []  # Pitch smoothing (ms)
+        self.harmonic_keys = []
         self.master_amp = 0.5
-        self.smoothing_time = 100
-        self.current_amp = 0.0
-        self.target_amp = 0.0
-        self.frozen_freq = 0.0
-        self.frozen_amp = 0.0
-        self.is_frozen = False
+        self.global_amp_smoothing = 100  # Global amplitude smoothing
+        self.global_pitch_smoothing = 100  # Global pitch smoothing
+        self.current_amps = []
+        self.target_amps = []
+        self.last_key_check = time.time()
+        self.key_check_interval = 0.02
+        self.target_freqs = []
+        self.current_freqs = []
 
-    def add_harmonic(self, multiplier, initial_amp=1.0):
+    def add_harmonic(self, multiplier, initial_amp=1.0, amp_smoothing=100, pitch_smoothing=100, trigger_key=None):
         try:
             mult = float(multiplier)
             if mult not in self.harmonics:
@@ -41,6 +46,13 @@ class SineGen:
                 self.phases.append(0.0)
                 self.harmonic_amps.append(float(initial_amp))
                 self.snap_enabled.append(False)
+                self.harmonic_amp_smoothing.append(float(amp_smoothing))
+                self.harmonic_pitch_smoothing.append(float(pitch_smoothing))
+                self.harmonic_keys.append(trigger_key)
+                self.current_amps.append(0.0)
+                self.target_amps.append(0.0)
+                self.target_freqs.append(0.0)
+                self.current_freqs.append(0.0)
         except ValueError:
             pass
 
@@ -51,6 +63,13 @@ class SineGen:
             del self.phases[idx]
             del self.harmonic_amps[idx]
             del self.snap_enabled[idx]
+            del self.harmonic_amp_smoothing[idx]
+            del self.harmonic_pitch_smoothing[idx]
+            del self.harmonic_keys[idx]
+            del self.current_amps[idx]
+            del self.target_amps[idx]
+            del self.target_freqs[idx]
+            del self.current_freqs[idx]
 
     def set_harmonic_amp(self, multiplier, amplitude):
         if multiplier in self.harmonics:
@@ -62,22 +81,38 @@ class SineGen:
             idx = self.harmonics.index(multiplier)
             self.snap_enabled[idx] = bool(snap_enabled)
 
+    def set_harmonic_amp_smoothing(self, multiplier, smoothing):
+        if multiplier in self.harmonics:
+            idx = self.harmonics.index(multiplier)
+            self.harmonic_amp_smoothing[idx] = max(0.0, float(smoothing))
+
+    def set_harmonic_pitch_smoothing(self, multiplier, smoothing):
+        if multiplier in self.harmonics:
+            idx = self.harmonics.index(multiplier)
+            self.harmonic_pitch_smoothing[idx] = max(0.0, float(smoothing))
+
+    def set_harmonic_key(self, multiplier, trigger_key):
+        if multiplier in self.harmonics:
+            idx = self.harmonics.index(multiplier)
+            self.harmonic_keys[idx] = trigger_key
+
     def audio_callback(self, in_data, frame_count, time_info, status):
         current_freq = (self.mouse_x / 1920) * (self.max_freq - self.min_freq) + self.min_freq
         current_amp = (self.mouse_y / 1080) / 2
 
-        if keyboard.is_pressed("space"):
-            self.target_amp = 1.0
-            self.frozen_freq = current_freq
-            self.frozen_amp = current_amp
-            self.is_frozen = False
-        else:
-            self.target_amp = 0.0
-            if not self.is_frozen:
-                self.is_frozen = True
-
-        base_freq = self.frozen_freq if self.is_frozen else current_freq
-        amplitude = self.frozen_amp if self.is_frozen else current_amp
+        now = time.time()
+        if now - self.last_key_check >= self.key_check_interval:
+            for i, key in enumerate(self.harmonic_keys):
+                if key and keyboard.is_pressed(key):
+                    self.target_amps[i] = 1.0
+                    raw_freq = current_freq * self.harmonics[i]
+                    self.target_freqs[i] = snap_frequency(raw_freq) if self.snap_enabled[i] else raw_freq
+                    # Immediate frequency when pitch smoothing is 0
+                    if self.harmonic_pitch_smoothing[i] <= 0:
+                        self.current_freqs[i] = self.target_freqs[i]
+                else:
+                    self.target_amps[i] = 0.0
+            self.last_key_check = now
 
         combined_wave = np.zeros(frame_count, dtype=np.float32)
         if self.harmonics:
@@ -85,26 +120,34 @@ class SineGen:
             t = np.arange(frame_count) / self.sample_rate
 
             for i, mult in enumerate(self.harmonics):
-                raw_freq = base_freq * mult
+                # Handle frequency smoothing
+                pitch_smoothing = self.harmonic_pitch_smoothing[i] if self.harmonic_pitch_smoothing[i] > 0 else self.global_pitch_smoothing
+                if pitch_smoothing > 0:
+                    freq_tau = pitch_smoothing / 1000
+                    freq_decay = np.exp(-1 / (freq_tau * self.sample_rate))
+                    self.current_freqs[i] = self.current_freqs[i] * freq_decay + self.target_freqs[i] * (1 - freq_decay)
+                else:
+                    self.current_freqs[i] = self.target_freqs[i]
                 
-                # Apply frequency snapping if enabled
-                freq = snap_frequency(raw_freq) if self.snap_enabled[i] else raw_freq
+                freq = self.current_freqs[i]
                 
+                # Handle amplitude smoothing
+                amp_smoothing = self.harmonic_amp_smoothing[i] if self.harmonic_amp_smoothing[i] > 0 else self.global_amp_smoothing
+                if amp_smoothing > 0:
+                    amp_tau = amp_smoothing / 1000
+                    amp_decay = np.exp(-1 / (amp_tau * self.sample_rate))
+                    steps = np.arange(frame_count)
+                    envelope = self.current_amps[i] * (amp_decay ** steps) + self.target_amps[i] * (1 - amp_decay ** steps)
+                    self.current_amps[i] = envelope[-1]
+                else:
+                    envelope = np.full(frame_count, self.target_amps[i], dtype=np.float32)
+                    self.current_amps[i] = self.target_amps[i]
+                
+                # Generate waveform
                 phase = self.phases[i]
-                amp = amplitude * (self.harmonic_amps[i] / total_amps)
+                amp = current_amp * (self.harmonic_amps[i] / total_amps) * envelope
                 sine_wave = amp * np.sin(2 * np.pi * freq * t + phase)
                 combined_wave += sine_wave
                 self.phases[i] = (phase + 2 * np.pi * freq * frame_count / self.sample_rate) % (2 * np.pi)
 
-        if self.smoothing_time > 0:
-            tau = self.smoothing_time / 1000
-            decay = np.exp(-1 / (tau * self.sample_rate)) if tau > 0 else 0
-            steps = np.arange(frame_count)
-            envelope = self.current_amp * (decay ** steps) + self.target_amp * (1 - decay ** steps)
-            self.current_amp = envelope[-1]
-        else:
-            envelope = np.full(frame_count, self.target_amp, dtype=np.float32)
-            self.current_amp = self.target_amp
-
-        combined_wave *= envelope.astype(np.float32)
         return (combined_wave.tobytes(), pyaudio.paContinue)
