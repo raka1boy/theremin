@@ -61,7 +61,7 @@ class HarmonicControl(ttk.Frame):
         self.pitch_smoothing_slider = ttk.Scale(
             self, 
             from_=0, 
-            to=100,  # Reduced max value for finer control
+            to=50,  # Reduced max value for finer control
             value=0,  # Lower default
             command=lambda v: self.generator.set_harmonic_pitch_smoothing(self.multiplier, float(v))
         )
