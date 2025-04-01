@@ -37,6 +37,8 @@ class SineGen:
         self.key_check_interval = 0.02
         self.target_freqs = []
         self.current_freqs = []
+        self.screen_x = 1920  # Default values, will be updated by UI
+        self.screen_y = 1080
 
     def add_harmonic(self, multiplier, initial_amp=1.0, amp_smoothing=100, pitch_smoothing=50, trigger_key="space"):
         try:
@@ -102,10 +104,10 @@ class SineGen:
             current_freq = self.min_freq
         else:
             # Logarithmic scaling between min and max frequencies
-            ratio = self.mouse_x / 1920  # Assuming screen width is 1920 pixels
+            ratio = self.mouse_x / self.screen_x
             current_freq = self.min_freq * (self.max_freq / self.min_freq) ** ratio
 
-        current_amp = (self.mouse_y / 1080) / 2
+        current_amp = (self.mouse_y / self.screen_y) / 2
 
         now = time.time()
         if now - self.last_key_check >= self.key_check_interval:

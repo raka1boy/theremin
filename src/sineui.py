@@ -152,6 +152,8 @@ class ControlUI(tk.Tk):
     def __init__(self, generator):
         super().__init__()
         self.generator = generator
+        self.generator.screen_x = self.winfo_screenwidth()
+        self.generator.screen_y = self.winfo_screenheight()
         self.title("Theremin")
         self.geometry("1000x650")
         
