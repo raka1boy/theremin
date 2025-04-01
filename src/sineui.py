@@ -19,6 +19,17 @@ def note_from_freq(frequency):
     octave = key_number // 12
     return (note, octave)
 
+def snap_to_c(freq):
+    """Snap frequency to nearest C note in 12-TET scale"""
+    if freq <= 0:
+        return freq
+    C0 = 16.35  # Fundamental frequency of C0
+    # Calculate number of octaves from C0
+    octaves = np.log2(freq / C0)
+    # Round to nearest whole octave
+    nearest_octave = round(octaves)
+    return C0 * (2 ** nearest_octave)
+
 class HarmonicControl(ttk.Frame):
     def __init__(self, parent, generator, multiplier, on_remove=None):
         super().__init__(parent)
@@ -61,22 +72,19 @@ class HarmonicControl(ttk.Frame):
         self.pitch_smoothing_slider = ttk.Scale(
             self, 
             from_=0, 
-            to=50,  # Reduced max value for finer control
-            value=0,  # Lower default
-            command=lambda v: self.generator.set_harmonic_pitch_smoothing(self.multiplier, float(v))
+            to=50,
+            value=0,
+            command=lambda v: [
+                self.generator.set_harmonic_pitch_smoothing(self.multiplier, float(v)),
+                self.pitch_smooth_value.set(f"{int(float(v))}ms")
+            ]
         )
         self.pitch_smoothing_slider.grid(row=0, column=6, sticky="ew", padx=5)
 
         # Add a label showing exact value
         self.pitch_smooth_value = tk.StringVar()
-        self.pitch_smooth_value.set("50ms")
+        self.pitch_smooth_value.set("0ms")
         ttk.Label(self, textvariable=self.pitch_smooth_value, width=5).grid(row=0, column=7, padx=(0,5))
-
-        # Modify the command to update the label
-        self.pitch_smoothing_slider.config(command=lambda v: [
-            self.generator.set_harmonic_pitch_smoothing(self.multiplier, float(v)),
-            self.pitch_smooth_value.set(f"{int(float(v))}ms")
-        ])
         
         # Key binding
         self.key_btn = ttk.Button(
@@ -110,13 +118,12 @@ class HarmonicControl(ttk.Frame):
             parent=self
         )
         if key:
-            # Handle spacebar specially
             if key.lower() in ["space", " "]:
                 key = "space"
             elif len(key) == 1:
                 key = key.lower()
             else:
-                return  # Invalid input
+                return
             
             self.trigger_key = key
             display_text = "space" if key == "space" else key
@@ -138,7 +145,6 @@ class HarmonicControl(ttk.Frame):
                 self.note_var.set(f"{note_info[0]}{note_info[1]}" if note_info else "")
                 self.freq_var.set(f"{display_freq:.1f} Hz")
             except ValueError:
-                # Harmonic not found (might have been removed)
                 self.note_var.set("")
                 self.freq_var.set("")
 
@@ -148,6 +154,9 @@ class ControlUI(tk.Tk):
         self.generator = generator
         self.title("Theremin")
         self.geometry("1000x650")
+        
+        self.min_freq_var = tk.StringVar()
+        self.max_freq_var = tk.StringVar()
         
         self.setup_ui()
         self.setup_audio()
@@ -200,32 +209,62 @@ class ControlUI(tk.Tk):
             from_=0,
             to=1000,
             value=100,
-            command=lambda v: setattr(self.generator, 'global_smoothing', float(v))
+            command=lambda v: setattr(self.generator, 'global_amp_smoothing', float(v))
         )
         self.global_smoothing.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
         
         freq_frame = ttk.Frame(main_frame)
         freq_frame.pack(fill=tk.X, pady=5)
         
+        # Min Frequency controls
         ttk.Label(freq_frame, text="Min Freq:").pack(side=tk.LEFT)
         self.min_freq = ttk.Scale(
             freq_frame,
             from_=1,
-            to=10000,
-            value=10,
-            command=lambda v: setattr(self.generator, 'min_freq', float(v))
+            to=20000,
+            value=snap_to_c(self.generator.min_freq),
+            command=self.update_min_freq
         )
         self.min_freq.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
+        ttk.Label(freq_frame, textvariable=self.min_freq_var, width=8).pack(side=tk.LEFT)
+        self.min_freq_var.set(f"{snap_to_c(self.generator.min_freq):.1f} Hz")
         
+        # Max Frequency controls
         ttk.Label(freq_frame, text="Max Freq:").pack(side=tk.LEFT)
         self.max_freq = ttk.Scale(
             freq_frame,
             from_=1,
-            to=10000,
-            value=1500,
-            command=lambda v: setattr(self.generator, 'max_freq', float(v))
+            to=20000,
+            value=snap_to_c(self.generator.max_freq),
+            command=self.update_max_freq
         )
         self.max_freq.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
+        ttk.Label(freq_frame, textvariable=self.max_freq_var, width=8).pack(side=tk.LEFT)
+        self.max_freq_var.set(f"{snap_to_c(self.generator.max_freq):.1f} Hz")
+
+    def update_min_freq(self, value):
+        # Only update if the value has actually changed
+        snapped_freq = snap_to_c(float(value))
+        if abs(self.generator.min_freq - snapped_freq) > 0.1:  # Small threshold to prevent floating point issues
+            self.generator.min_freq = snapped_freq
+            self.min_freq_var.set(f"{snapped_freq:.1f} Hz")
+            # Temporarily disable the command to prevent recursion
+            original_cmd = self.min_freq.cget('command')
+            self.min_freq.config(command=lambda v: None)
+            self.min_freq.set(snapped_freq)
+            self.min_freq.config(command=original_cmd)
+
+    def update_max_freq(self, value):
+        # Only update if the value has actually changed
+        snapped_freq = snap_to_c(float(value))
+        if abs(self.generator.max_freq - snapped_freq) > 0.1:  # Small threshold to prevent floating point issues
+            self.generator.max_freq = snapped_freq
+            self.max_freq_var.set(f"{snapped_freq:.1f} Hz")
+            # Temporarily disable the command to prevent recursion
+            original_cmd = self.max_freq.cget('command')
+            self.max_freq.config(command=lambda v: None)
+            self.max_freq.set(snapped_freq)
+            self.max_freq.config(command=original_cmd)
 
     def add_harmonic(self):
         try:

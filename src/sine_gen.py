@@ -97,7 +97,14 @@ class SineGen:
             self.harmonic_keys[idx] = trigger_key
 
     def audio_callback(self, in_data, frame_count, time_info, status):
-        current_freq = (self.mouse_x / 1920) * (self.max_freq - self.min_freq) + self.min_freq
+        # Convert mouse X position to logarithmic frequency scale
+        if self.min_freq <= 0 or self.max_freq <= self.min_freq:
+            current_freq = self.min_freq
+        else:
+            # Logarithmic scaling between min and max frequencies
+            ratio = self.mouse_x / 1920  # Assuming screen width is 1920 pixels
+            current_freq = self.min_freq * (self.max_freq / self.min_freq) ** ratio
+
         current_amp = (self.mouse_y / 1080) / 2
 
         now = time.time()
