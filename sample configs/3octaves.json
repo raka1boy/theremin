@@ -1,0 +1,60 @@
+{
+    "min_freq": 130.8,
+    "max_freq": 1046.4,
+    "global_amp_smoothing": 100,
+    "global_pitch_smoothing": 50,
+    "harmonics": [
+        {
+            "multiplier": 1.0,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "space"
+        },
+        {
+            "multiplier": 2.0,
+            "amplitude": 0.7093023255813954,
+            "amp_smoothing": 1000.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "space"
+        },
+        {
+            "multiplier": 4.0,
+            "amplitude": 0.32558139534883723,
+            "amp_smoothing": 1000.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "space"
+        },
+        {
+            "multiplier": 8.0,
+            "amplitude": 1.0,
+            "amp_smoothing": 1000.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "space"
+        }
+    ],
+    "groups": {
+        "octave1": {
+            "trigger_key": "1",
+            "harmonics": [
+                2.0
+            ]
+        },
+        "octave2": {
+            "trigger_key": "2",
+            "harmonics": [
+                4.0
+            ]
+        },
+        "octave3": {
+            "trigger_key": "3",
+            "harmonics": [
+                8.0
+            ]
+        }
+    }
+}

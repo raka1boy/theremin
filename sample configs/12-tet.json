@@ -7,7 +7,7 @@
       {
         "multiplier": 1.0,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "1",
@@ -16,7 +16,7 @@
       {
         "multiplier": 1.059463094,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "2",
@@ -25,7 +25,7 @@
       {
         "multiplier": 1.122462048,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "3",
@@ -34,7 +34,7 @@
       {
         "multiplier": 1.189207115,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "4",
@@ -43,7 +43,7 @@
       {
         "multiplier": 1.259921049,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "5",
@@ -52,7 +52,7 @@
       {
         "multiplier": 1.334839854,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "6",
@@ -61,7 +61,7 @@
       {
         "multiplier": 1.414213562,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "7",
@@ -70,7 +70,7 @@
       {
         "multiplier": 1.498307076,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "8",
@@ -79,7 +79,7 @@
       {
         "multiplier": 1.587401051,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "9",
@@ -88,7 +88,7 @@
       {
         "multiplier": 1.68179283,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "0",
@@ -97,7 +97,7 @@
       {
         "multiplier": 1.781797436,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "-",
@@ -106,7 +106,7 @@
       {
         "multiplier": 1.887748625,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
         "trigger_key": "=",
@@ -115,10 +115,10 @@
       {
         "multiplier": 2.0,
         "amplitude": 1.0,
-        "amp_smoothing": 1,
+        "amp_smoothing": 10,
         "pitch_smoothing": 1,
         "snap_enabled": true,
-        "trigger_key": "q",
+        "trigger_key": "\\",
         "note": "C (octave)"
       }
     ],
@@ -172,7 +172,7 @@
         "harmonics": [1.887748625]
       },
       "High C": {
-        "trigger_key": "|",
+        "trigger_key": "/",
         "harmonics": [2.0]
       }
     }

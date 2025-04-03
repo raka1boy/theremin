@@ -104,7 +104,7 @@ class HarmonicControl(ttk.Frame):
         
         ttk.Label(self, text="Pitch Smooth:").grid(row=0, column=5, padx=(10,0), sticky='e')
         self.pitch_smoothing_slider = ttk.Scale(
-            self, from_=0, to=50, value=0,
+            self, from_=0, to=50, value=1,
             command=lambda v: [
                 self.generator.set_harmonic_pitch_smoothing(self.multiplier, float(v)),
                 self.pitch_smooth_value.set(f"{int(float(v))}ms")
@@ -607,7 +607,7 @@ class ConfigManager:
                     multiplier=mult,
                     initial_amp=float(harmonic.get('amplitude', 1.0)),
                     amp_smoothing=float(harmonic.get('amp_smoothing', 100)),
-                    pitch_smoothing=float(harmonic.get('pitch_smoothing', 50)),
+                    pitch_smoothing=float(harmonic.get('pitch_smoothing', 1)),
                     trigger_key=harmonic.get('trigger_key', 'space')
                 )
                 generator.set_harmonic_snap(mult, bool(harmonic.get('snap_enabled', False)))
