@@ -25,20 +25,24 @@ class SineGen:
         self.phases = []
         self.harmonic_amps = []
         self.snap_enabled = []
-        self.harmonic_amp_smoothing = []  # Amplitude smoothing (ms)
-        self.harmonic_pitch_smoothing = []  # Pitch smoothing (ms)
+        self.harmonic_amp_smoothing = []
+        self.harmonic_pitch_smoothing = []
         self.harmonic_keys = []
         self.master_amp = 0.5
-        self.global_amp_smoothing = 100  # Global amplitude smoothing
-        self.global_pitch_smoothing = 50  # Lower default for more precision
+        self.global_amp_smoothing = 100
+        self.global_pitch_smoothing = 50
         self.current_amps = []
         self.target_amps = []
         self.last_key_check = time.time()
         self.key_check_interval = 0.02
         self.target_freqs = []
         self.current_freqs = []
-        self.screen_x = 1920  # Default values, will be updated by UI
+        self.screen_x = 1920
         self.screen_y = 1080
+        
+        # Group-related attributes
+        self.groups = {}  # {group_name: {'trigger_key': str, 'harmonics': [multipliers]}}
+        self.group_assignments = {}  # {multiplier: group_name}
 
     def add_harmonic(self, multiplier, initial_amp=1.0, amp_smoothing=100, pitch_smoothing=50, trigger_key="space"):
         try:
@@ -61,6 +65,7 @@ class SineGen:
     def remove_harmonic(self, multiplier):
         if multiplier in self.harmonics:
             idx = self.harmonics.index(multiplier)
+            self.remove_from_group(multiplier)
             del self.harmonics[idx]
             del self.phases[idx]
             del self.harmonic_amps[idx]
@@ -98,12 +103,68 @@ class SineGen:
             idx = self.harmonics.index(multiplier)
             self.harmonic_keys[idx] = trigger_key
 
+    # Group management methods
+    def create_group(self, group_name, trigger_key, harmonics=None):
+        """Create a new harmonic group"""
+        if group_name in self.groups:
+            raise ValueError(f"Group '{group_name}' already exists")
+        
+        self.groups[group_name] = {
+            'trigger_key': trigger_key,
+            'harmonics': harmonics or []
+        }
+        
+        for mult in harmonics or []:
+            if mult in self.harmonics:
+                self.group_assignments[mult] = group_name
+
+    def assign_to_group(self, multiplier, group_name):
+        """Assign a harmonic to a group"""
+        if group_name not in self.groups:
+            raise ValueError(f"Group '{group_name}' doesn't exist")
+        if multiplier not in self.harmonics:
+            raise ValueError(f"Harmonic {multiplier}x not found")
+        
+        # Remove from any existing group
+        self.remove_from_group(multiplier)
+        
+        self.groups[group_name]['harmonics'].append(multiplier)
+        self.group_assignments[multiplier] = group_name
+
+    def remove_from_group(self, multiplier):
+        """Remove a harmonic from its group"""
+        if multiplier in self.group_assignments:
+            group_name = self.group_assignments[multiplier]
+            if group_name in self.groups and multiplier in self.groups[group_name]['harmonics']:
+                self.groups[group_name]['harmonics'].remove(multiplier)
+            del self.group_assignments[multiplier]
+
+    def remove_group(self, group_name):
+        """Remove an entire group"""
+        if group_name not in self.groups:
+            raise ValueError(f"Group '{group_name}' doesn't exist")
+        
+        for mult in self.groups[group_name]['harmonics']:
+            if mult in self.group_assignments:
+                del self.group_assignments[mult]
+        
+        del self.groups[group_name]
+
+    def set_group_key(self, group_name, trigger_key):
+        """Set the trigger key for a group"""
+        if group_name not in self.groups:
+            raise ValueError(f"Group '{group_name}' doesn't exist")
+        self.groups[group_name]['trigger_key'] = trigger_key
+
+    def get_group_for_harmonic(self, multiplier):
+        """Get the group name for a harmonic, if any"""
+        return self.group_assignments.get(multiplier)
+
     def audio_callback(self, in_data, frame_count, time_info, status):
         # Convert mouse X position to logarithmic frequency scale
         if self.min_freq <= 0 or self.max_freq <= self.min_freq:
             current_freq = self.min_freq
         else:
-            # Logarithmic scaling between min and max frequencies
             ratio = self.mouse_x / self.screen_x
             current_freq = self.min_freq * (self.max_freq / self.min_freq) ** ratio
 
@@ -111,16 +172,37 @@ class SineGen:
 
         now = time.time()
         if now - self.last_key_check >= self.key_check_interval:
+            # Track which harmonics are currently triggered
+            triggered_harmonics = set()
+
+            # First check group keys
+            for group_name, group_data in self.groups.items():
+                if keyboard.is_pressed(group_data['trigger_key']):
+                    for mult in group_data['harmonics']:
+                        if mult in self.harmonics:
+                            idx = self.harmonics.index(mult)
+                            self.target_amps[idx] = 1.0
+                            raw_freq = current_freq * mult
+                            self.target_freqs[idx] = snap_frequency(raw_freq) if self.snap_enabled[idx] else raw_freq
+                            if self.harmonic_pitch_smoothing[idx] <= 0:
+                                self.current_freqs[idx] = self.target_freqs[idx]
+                            triggered_harmonics.add(idx)
+                
+            # Then check individual harmonic keys
             for i, key in enumerate(self.harmonic_keys):
-                if key and keyboard.is_pressed(key):
+                if key and keyboard.is_pressed(key) and not self.get_group_for_harmonic(self.harmonics[i]):
                     self.target_amps[i] = 1.0
                     raw_freq = current_freq * self.harmonics[i]
                     self.target_freqs[i] = snap_frequency(raw_freq) if self.snap_enabled[i] else raw_freq
-                    # Immediate frequency when pitch smoothing is 0
                     if self.harmonic_pitch_smoothing[i] <= 0:
                         self.current_freqs[i] = self.target_freqs[i]
-                else:
+                    triggered_harmonics.add(i)
+            
+            # Turn off harmonics that aren't being triggered
+            for i in range(len(self.harmonics)):
+                if i not in triggered_harmonics:
                     self.target_amps[i] = 0.0
+            
             self.last_key_check = now
 
         combined_wave = np.zeros(frame_count, dtype=np.float32)

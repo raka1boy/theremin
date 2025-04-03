@@ -1,0 +1,179 @@
+{
+    "min_freq": 261.63,
+    "max_freq": 523.25,
+    "global_amp_smoothing": 1,
+    "global_pitch_smoothing": 1,
+    "harmonics": [
+      {
+        "multiplier": 1.0,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "1",
+        "note": "C"
+      },
+      {
+        "multiplier": 1.059463094,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "2",
+        "note": "C#"
+      },
+      {
+        "multiplier": 1.122462048,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "3",
+        "note": "D"
+      },
+      {
+        "multiplier": 1.189207115,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "4",
+        "note": "D#"
+      },
+      {
+        "multiplier": 1.259921049,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "5",
+        "note": "E"
+      },
+      {
+        "multiplier": 1.334839854,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "6",
+        "note": "F"
+      },
+      {
+        "multiplier": 1.414213562,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "7",
+        "note": "F#"
+      },
+      {
+        "multiplier": 1.498307076,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "8",
+        "note": "G"
+      },
+      {
+        "multiplier": 1.587401051,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "9",
+        "note": "G#"
+      },
+      {
+        "multiplier": 1.68179283,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "0",
+        "note": "A"
+      },
+      {
+        "multiplier": 1.781797436,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "-",
+        "note": "A#"
+      },
+      {
+        "multiplier": 1.887748625,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "=",
+        "note": "B"
+      },
+      {
+        "multiplier": 2.0,
+        "amplitude": 1.0,
+        "amp_smoothing": 1,
+        "pitch_smoothing": 1,
+        "snap_enabled": true,
+        "trigger_key": "q",
+        "note": "C (octave)"
+      }
+    ],
+    "groups": {
+      "C": {
+        "trigger_key": "1",
+        "harmonics": [1.0]
+      },
+      "C#": {
+        "trigger_key": "2",
+        "harmonics": [1.059463094]
+      },
+      "D": {
+        "trigger_key": "3",
+        "harmonics": [1.122462048]
+      },
+      "D#": {
+        "trigger_key": "4",
+        "harmonics": [1.189207115]
+      },
+      "E": {
+        "trigger_key": "5",
+        "harmonics": [1.259921049]
+      },
+      "F": {
+        "trigger_key": "6",
+        "harmonics": [1.334839854]
+      },
+      "F#": {
+        "trigger_key": "7",
+        "harmonics": [1.414213562]
+      },
+      "G": {
+        "trigger_key": "8",
+        "harmonics": [1.498307076]
+      },
+      "G#": {
+        "trigger_key": "9",
+        "harmonics": [1.587401051]
+      },
+      "A": {
+        "trigger_key": "0",
+        "harmonics": [1.68179283]
+      },
+      "A#": {
+        "trigger_key": "-",
+        "harmonics": [1.781797436]
+      },
+      "B": {
+        "trigger_key": "=",
+        "harmonics": [1.887748625]
+      },
+      "High C": {
+        "trigger_key": "|",
+        "harmonics": [2.0]
+      }
+    }
+  }
