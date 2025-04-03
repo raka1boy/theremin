@@ -1,0 +1,32 @@
+{
+    "min_freq": 1,
+    "max_freq": 3000,
+    "global_amp_smoothing": 100,
+    "global_pitch_smoothing": 50,
+    "harmonics": [
+        {
+            "multiplier": 1.0,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 50.0,
+            "snap_enabled": false,
+            "trigger_key": "space"
+        },
+        {
+            "multiplier": 2.0,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 50.0,
+            "snap_enabled": false,
+            "trigger_key": "space"
+        },
+        {
+            "multiplier": 3.0,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 50.0,
+            "snap_enabled": false,
+            "trigger_key": "space"
+        }
+    ]
+}

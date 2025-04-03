@@ -5,6 +5,7 @@ from pynput import mouse
 import tkinter as tk
 from tkinter import ttk, simpledialog
 from sine_gen import snap_frequency
+from config_manager import ConfigManager
 
 SCREEN_X, SCREEN_Y = 1920, 1080
 
@@ -164,6 +165,16 @@ class ControlUI(tk.Tk):
         self.setup_audio()
         self.setup_updater()
 
+    def rebuild_harmonics_ui(self):
+        """Rebuild the harmonics UI after loading a config"""
+        # Clear existing controls
+        for child in self.inner_harmonics_frame.winfo_children():
+            child.destroy()
+        
+        # Add controls for current harmonics
+        for mult in self.generator.harmonics:
+            self.add_harmonic_control(mult)
+
     def setup_ui(self):
         main_frame = ttk.Frame(self)
         main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
@@ -204,6 +215,20 @@ class ControlUI(tk.Tk):
         
         global_controls = ttk.Frame(main_frame)
         global_controls.pack(fill=tk.X, pady=5)
+        config_btn_frame = ttk.Frame(main_frame)
+        config_btn_frame.pack(fill=tk.X, pady=5)
+        
+        ttk.Button(
+            config_btn_frame, 
+            text="Save Config", 
+            command=lambda: ConfigManager.save_config(self.generator, self)
+        ).pack(side=tk.LEFT, padx=5)
+        
+        ttk.Button(
+            config_btn_frame, 
+            text="Load Config", 
+            command=lambda: ConfigManager.load_config(self.generator, self, self.rebuild_harmonics_ui)
+        ).pack(side=tk.LEFT, padx=5)
         
         ttk.Label(global_controls, text="Global Smoothing (ms):").pack(side=tk.LEFT)
         self.global_smoothing = ttk.Scale(

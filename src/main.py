@@ -1,5 +1,3 @@
-from sineui import ControlUI
-from sine_gen import SineGen
 import sys
 import subprocess
 import importlib
