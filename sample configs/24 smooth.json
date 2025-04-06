@@ -1,0 +1,570 @@
+{
+    "min_freq": 261.63,
+    "max_freq": 1046.5,
+    "global_amp_smoothing": 1.0,
+    "global_pitch_smoothing": 1.0,
+    "harmonics": [
+        {
+            "multiplier": 1.0,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "1"
+        },
+        {
+            "multiplier": 1.029302236,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "q"
+        },
+        {
+            "multiplier": 1.059463094,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "a"
+        },
+        {
+            "multiplier": 1.090507732,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "z"
+        },
+        {
+            "multiplier": 1.122462048,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "2"
+        },
+        {
+            "multiplier": 1.155352696,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "w"
+        },
+        {
+            "multiplier": 1.189207115,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "s"
+        },
+        {
+            "multiplier": 1.22405365,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "x"
+        },
+        {
+            "multiplier": 1.259921049,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "3"
+        },
+        {
+            "multiplier": 1.296839554,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "e"
+        },
+        {
+            "multiplier": 1.334839854,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "d"
+        },
+        {
+            "multiplier": 1.3739539,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "c"
+        },
+        {
+            "multiplier": 1.414213562,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "4"
+        },
+        {
+            "multiplier": 1.455652476,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "r"
+        },
+        {
+            "multiplier": 1.498307076,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "f"
+        },
+        {
+            "multiplier": 1.542210825,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "v"
+        },
+        {
+            "multiplier": 1.587401051,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "5"
+        },
+        {
+            "multiplier": 1.633915456,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "t"
+        },
+        {
+            "multiplier": 1.68179283,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "g"
+        },
+        {
+            "multiplier": 1.73107342,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "b"
+        },
+        {
+            "multiplier": 1.781797436,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "6"
+        },
+        {
+            "multiplier": 1.834008086,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "y"
+        },
+        {
+            "multiplier": 1.887748625,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "h"
+        },
+        {
+            "multiplier": 1.943063483,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "n"
+        },
+        {
+            "multiplier": 2.0,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "7"
+        },
+        {
+            "multiplier": 2.059463094,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "u"
+        },
+        {
+            "multiplier": 2.122462048,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "j"
+        },
+        {
+            "multiplier": 2.189207115,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "m"
+        },
+        {
+            "multiplier": 2.259921049,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "8"
+        },
+        {
+            "multiplier": 2.334839854,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "i"
+        },
+        {
+            "multiplier": 2.414213562,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "k"
+        },
+        {
+            "multiplier": 2.498307076,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": ","
+        },
+        {
+            "multiplier": 2.587401051,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "9"
+        },
+        {
+            "multiplier": 2.68179283,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "o"
+        },
+        {
+            "multiplier": 2.781797436,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "l"
+        },
+        {
+            "multiplier": 2.887748625,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "."
+        },
+        {
+            "multiplier": 3.0,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "0"
+        },
+        {
+            "multiplier": 3.118285057,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "p"
+        },
+        {
+            "multiplier": 3.242279855,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": ";"
+        },
+        {
+            "multiplier": 3.372281323,
+            "amplitude": 1.0,
+            "amp_smoothing": 100.0,
+            "pitch_smoothing": 1.0,
+            "snap_enabled": false,
+            "trigger_key": "/"
+        }
+    ],
+    "groups": {
+        "C4": {
+            "trigger_key": "1",
+            "harmonics": [
+                1.0
+            ]
+        },
+        "C4 quarter-sharp": {
+            "trigger_key": "q",
+            "harmonics": [
+                1.029302236
+            ]
+        },
+        "C#4": {
+            "trigger_key": "a",
+            "harmonics": [
+                1.059463094
+            ]
+        },
+        "C#4 quarter-sharp": {
+            "trigger_key": "z",
+            "harmonics": [
+                1.090507732
+            ]
+        },
+        "D4": {
+            "trigger_key": "2",
+            "harmonics": [
+                1.122462048
+            ]
+        },
+        "D4 quarter-sharp": {
+            "trigger_key": "w",
+            "harmonics": [
+                1.155352696
+            ]
+        },
+        "D#4": {
+            "trigger_key": "s",
+            "harmonics": [
+                1.189207115
+            ]
+        },
+        "D#4 quarter-sharp": {
+            "trigger_key": "x",
+            "harmonics": [
+                1.22405365
+            ]
+        },
+        "E4": {
+            "trigger_key": "3",
+            "harmonics": [
+                1.259921049
+            ]
+        },
+        "E4 quarter-sharp": {
+            "trigger_key": "e",
+            "harmonics": [
+                1.296839554
+            ]
+        },
+        "F4": {
+            "trigger_key": "d",
+            "harmonics": [
+                1.334839854
+            ]
+        },
+        "F4 quarter-sharp": {
+            "trigger_key": "c",
+            "harmonics": [
+                1.3739539
+            ]
+        },
+        "F#4": {
+            "trigger_key": "4",
+            "harmonics": [
+                1.414213562
+            ]
+        },
+        "F#4 quarter-sharp": {
+            "trigger_key": "r",
+            "harmonics": [
+                1.455652476
+            ]
+        },
+        "G4": {
+            "trigger_key": "f",
+            "harmonics": [
+                1.498307076
+            ]
+        },
+        "G4 quarter-sharp": {
+            "trigger_key": "v",
+            "harmonics": [
+                1.542210825
+            ]
+        },
+        "G#4": {
+            "trigger_key": "5",
+            "harmonics": [
+                1.587401051
+            ]
+        },
+        "G#4 quarter-sharp": {
+            "trigger_key": "t",
+            "harmonics": [
+                1.633915456
+            ]
+        },
+        "A4": {
+            "trigger_key": "g",
+            "harmonics": [
+                1.68179283
+            ]
+        },
+        "A4 quarter-sharp": {
+            "trigger_key": "b",
+            "harmonics": [
+                1.73107342
+            ]
+        },
+        "A#4": {
+            "trigger_key": "6",
+            "harmonics": [
+                1.781797436
+            ]
+        },
+        "A#4 quarter-sharp": {
+            "trigger_key": "y",
+            "harmonics": [
+                1.834008086
+            ]
+        },
+        "B4": {
+            "trigger_key": "h",
+            "harmonics": [
+                1.887748625
+            ]
+        },
+        "B4 quarter-sharp": {
+            "trigger_key": "n",
+            "harmonics": [
+                1.943063483
+            ]
+        },
+        "C5": {
+            "trigger_key": "7",
+            "harmonics": [
+                2.0
+            ]
+        },
+        "C5 quarter-sharp": {
+            "trigger_key": "u",
+            "harmonics": [
+                2.059463094
+            ]
+        },
+        "C#5": {
+            "trigger_key": "j",
+            "harmonics": [
+                2.122462048
+            ]
+        },
+        "C#5 quarter-sharp": {
+            "trigger_key": "m",
+            "harmonics": [
+                2.189207115
+            ]
+        },
+        "D5": {
+            "trigger_key": "8",
+            "harmonics": [
+                2.259921049
+            ]
+        },
+        "D5 quarter-sharp": {
+            "trigger_key": "i",
+            "harmonics": [
+                2.334839854
+            ]
+        },
+        "D#5": {
+            "trigger_key": "k",
+            "harmonics": [
+                2.414213562
+            ]
+        },
+        "D#5 quarter-sharp": {
+            "trigger_key": ",",
+            "harmonics": [
+                2.498307076
+            ]
+        },
+        "E5": {
+            "trigger_key": "9",
+            "harmonics": [
+                2.587401051
+            ]
+        },
+        "E5 quarter-sharp": {
+            "trigger_key": "o",
+            "harmonics": [
+                2.68179283
+            ]
+        },
+        "F5": {
+            "trigger_key": "l",
+            "harmonics": [
+                2.781797436
+            ]
+        },
+        "F5 quarter-sharp": {
+            "trigger_key": ".",
+            "harmonics": [
+                2.887748625
+            ]
+        },
+        "F#5": {
+            "trigger_key": "0",
+            "harmonics": [
+                3.0
+            ]
+        },
+        "F#5 quarter-sharp": {
+            "trigger_key": "p",
+            "harmonics": [
+                3.118285057
+            ]
+        },
+        "G5": {
+            "trigger_key": ";",
+            "harmonics": [
+                3.242279855
+            ]
+        },
+        "G5 quarter-sharp": {
+            "trigger_key": "/",
+            "harmonics": [
+                3.372281323
+            ]
+        }
+    }
+}

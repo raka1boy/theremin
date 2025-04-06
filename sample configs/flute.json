@@ -1,0 +1,115 @@
+{
+    "min_freq": 261.63,
+    "max_freq": 2093.0,
+    "global_amp_smoothing": 40,
+    "global_pitch_smoothing": 4,
+    "harmonics": [
+        {
+            "multiplier": 1.0,
+            "amplitude": 0.9,
+            "amp_smoothing": 60,
+            "pitch_smoothing": 3,
+            "snap_enabled": false,
+            "trigger_key": "a",
+            "note": "Fundamental"
+        },
+        {
+            "multiplier": 2.0,
+            "amplitude": 0.85,
+            "amp_smoothing": 50,
+            "pitch_smoothing": 2,
+            "snap_enabled": false,
+            "trigger_key": "s",
+            "note": "Octave"
+        },
+        {
+            "multiplier": 3.0,
+            "amplitude": 0.7,
+            "amp_smoothing": 45,
+            "pitch_smoothing": 2,
+            "snap_enabled": false,
+            "trigger_key": "d",
+            "note": "Twelfth"
+        },
+        {
+            "multiplier": 4.8,
+            "amplitude": 0.5,
+            "amp_smoothing": 40,
+            "pitch_smoothing": 2,
+            "snap_enabled": false,
+            "trigger_key": "f",
+            "note": "Air Harmonic"
+        },
+        {
+            "multiplier": 0.33,
+            "amplitude": 0.25,
+            "amp_smoothing": 120,
+            "pitch_smoothing": 8,
+            "snap_enabled": false,
+            "trigger_key": "q",
+            "note": "Breath Noise Low"
+        },
+        {
+            "multiplier": 0.66,
+            "amplitude": 0.35,
+            "amp_smoothing": 80,
+            "pitch_smoothing": 5,
+            "snap_enabled": false,
+            "trigger_key": "w",
+            "note": "Breath Noise Mid"
+        },
+        {
+            "multiplier": 1.33,
+            "amplitude": 0.3,
+            "amp_smoothing": 60,
+            "pitch_smoothing": 3,
+            "snap_enabled": false,
+            "trigger_key": "e",
+            "note": "Breath Noise High"
+        },
+        {
+            "multiplier": 3.8,
+            "amplitude": 0.45,
+            "amp_smoothing": 35,
+            "pitch_smoothing": 2,
+            "snap_enabled": false,
+            "trigger_key": "g",
+            "note": "Air Partial"
+        },
+        {
+            "multiplier": 5.1,
+            "amplitude": 0.4,
+            "amp_smoothing": 30,
+            "pitch_smoothing": 1,
+            "snap_enabled": false,
+            "trigger_key": "h",
+            "note": "Detuned 5th"
+        }
+    ],
+    "groups": {
+        "Airy Flute": {
+            "trigger_key": "1",
+            "harmonics": [1.0, 2.0, 3.0, 0.33, 0.66, 1.33],
+            "amplitudes": [0.9, 0.85, 0.7, 0.25, 0.35, 0.3],
+            "amp_smoothing": 70
+        },
+        "Breathy Headjoint": {
+            "trigger_key": "2",
+            "harmonics": [1.0, 0.33, 0.66, 1.33, 3.8, 5.1],
+            "amplitudes": [0.8, 0.3, 0.4, 0.35, 0.45, 0.4],
+            "amp_smoothing": 90
+        },
+        "Ethereal Harmonics": {
+            "trigger_key": "3",
+            "harmonics": [2.0, 3.0, 3.8, 4.8, 5.1],
+            "amplitudes": [0.8, 0.7, 0.5, 0.45, 0.4],
+            "pitch_smoothing": 3
+        },
+        "Whisper Tone": {
+            "trigger_key": "4",
+            "harmonics": [0.33, 0.66, 1.33, 2.0, 3.8],
+            "amplitudes": [0.4, 0.5, 0.45, 0.3, 0.25],
+            "amp_smoothing": 120
+        }
+    }
+}

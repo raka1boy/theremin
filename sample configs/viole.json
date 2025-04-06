@@ -1,0 +1,72 @@
+{
+    "min_freq": 130.81,
+    "max_freq": 392.00,
+    "global_amp_smoothing": 50,
+    "global_pitch_smoothing": 10,
+    "harmonics": [
+        {
+            "multiplier": 1.0,
+            "amplitude": 1.0,
+            "amp_smoothing": 100,
+            "pitch_smoothing": 5,
+            "snap_enabled": false,
+            "trigger_key": "z",
+            "note": "C3"
+        },
+        {
+            "multiplier": 2.0,
+            "amplitude": 0.6,
+            "amp_smoothing": 80,
+            "pitch_smoothing": 3,
+            "snap_enabled": false,
+            "trigger_key": "x",
+            "note": "C4"
+        },
+        {
+            "multiplier": 3.0,
+            "amplitude": 0.4,
+            "amp_smoothing": 60,
+            "pitch_smoothing": 2,
+            "snap_enabled": false,
+            "trigger_key": "c",
+            "note": "G4"
+        },
+        {
+            "multiplier": 4.0,
+            "amplitude": 0.25,
+            "amp_smoothing": 40,
+            "pitch_smoothing": 1,
+            "snap_enabled": false,
+            "trigger_key": "v",
+            "note": "C5"
+        },
+        {
+            "multiplier": 5.0,
+            "amplitude": 0.15,
+            "amp_smoothing": 30,
+            "pitch_smoothing": 1,
+            "snap_enabled": false,
+            "trigger_key": "b",
+            "note": "E5"
+        }
+    ],
+    "groups": {
+        "Viola C String": {
+            "trigger_key": "a",
+            "harmonics": [1.0, 2.0, 3.0, 4.0, 5.0],
+            "amplitudes": [1.0, 0.6, 0.4, 0.25, 0.15]
+        },
+        "Sul Tasto": {
+            "trigger_key": "s",
+            "harmonics": [1.0, 2.0, 3.0],
+            "amplitudes": [0.7, 0.5, 0.3],
+            "amp_smoothing": 150
+        },
+        "Sul Ponticello": {
+            "trigger_key": "d",
+            "harmonics": [3.0, 4.0, 5.0, 6.0],
+            "amplitudes": [0.5, 0.4, 0.3, 0.2],
+            "amp_smoothing": 50
+        }
+    }
+}

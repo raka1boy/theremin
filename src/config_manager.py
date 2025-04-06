@@ -1,27 +1,28 @@
 import json
-import os
+import tkinter as tk
 from tkinter import filedialog, messagebox
 
 class ConfigManager:
     @staticmethod
     def save_config(generator, parent_window):
-        """Save current configuration to a JSON file"""
         config = {
             'min_freq': generator.min_freq,
             'max_freq': generator.max_freq,
             'global_amp_smoothing': generator.global_amp_smoothing,
             'global_pitch_smoothing': generator.global_pitch_smoothing,
-            'harmonics': []
+            'harmonics': [],
+            'groups': {name: {'trigger_key': group.trigger_key, 'harmonics': group.harmonics} 
+                      for name, group in generator.groups.items()}
         }
         
-        for i, mult in enumerate(generator.harmonics):
+        for harmonic in generator.harmonics:
             config['harmonics'].append({
-                'multiplier': mult,
-                'amplitude': generator.harmonic_amps[i],
-                'amp_smoothing': generator.harmonic_amp_smoothing[i],
-                'pitch_smoothing': generator.harmonic_pitch_smoothing[i],
-                'snap_enabled': generator.snap_enabled[i],
-                'trigger_key': generator.harmonic_keys[i]
+                'multiplier': harmonic.multiplier,
+                'amplitude': harmonic.initial_amp,
+                'amp_smoothing': harmonic.amp_smoothing,
+                'pitch_smoothing': harmonic.pitch_smoothing,
+                'snap_enabled': harmonic.snap_enabled,
+                'trigger_key': harmonic.trigger_key
             })
         
         filepath = filedialog.asksaveasfilename(
@@ -41,7 +42,6 @@ class ConfigManager:
 
     @staticmethod
     def load_config(generator, parent_window, ui_callback=None):
-        """Load configuration from a JSON file"""
         filepath = filedialog.askopenfilename(
             parent=parent_window,
             defaultextension='.json',
@@ -56,27 +56,34 @@ class ConfigManager:
             with open(filepath, 'r') as f:
                 config = json.load(f)
             
-            # Clear existing harmonics
-            for mult in generator.harmonics[:]:
-                generator.remove_harmonic(mult)
+            # Clear existing data
+            for harmonic in generator.harmonics[:]:
+                generator.remove_harmonic(harmonic.multiplier)
             
-            # Set global parameters
             generator.min_freq = float(config.get('min_freq', generator.min_freq))
             generator.max_freq = float(config.get('max_freq', generator.max_freq))
             generator.global_amp_smoothing = float(config.get('global_amp_smoothing', generator.global_amp_smoothing))
             generator.global_pitch_smoothing = float(config.get('global_pitch_smoothing', generator.global_pitch_smoothing))
             
-            # Add harmonics
-            for harmonic in config.get('harmonics', []):
-                mult = float(harmonic['multiplier'])
+            # Recreate groups
+            generator.groups = {}
+            generator.group_assignments = {}
+            for group_name, group_data in config.get('groups', {}).items():
+                generator.create_group(group_name, group_data['trigger_key'], group_data['harmonics'])
+            
+            # Recreate harmonics
+            for harmonic_data in config.get('harmonics', []):
+                mult = float(harmonic_data['multiplier'])
                 generator.add_harmonic(
                     multiplier=mult,
-                    initial_amp=float(harmonic.get('amplitude', 1.0)),
-                    amp_smoothing=float(harmonic.get('amp_smoothing', 100)),
-                    pitch_smoothing=float(harmonic.get('pitch_smoothing', 50)),
-                    trigger_key=harmonic.get('trigger_key', 'space')
+                    initial_amp=float(harmonic_data.get('amplitude', 1.0)),
+                    amp_smoothing=float(harmonic_data.get('amp_smoothing', 100)),
+                    pitch_smoothing=float(harmonic_data.get('pitch_smoothing', 1)),
+                    trigger_key=harmonic_data.get('trigger_key', 'space')
                 )
-                generator.set_harmonic_snap(mult, bool(harmonic.get('snap_enabled', False)))
+                idx = generator._get_harmonic_index(mult)
+                if idx != -1:
+                    generator.harmonics[idx].snap_enabled = bool(harmonic_data.get('snap_enabled', False))
             
             if ui_callback:
                 ui_callback()
